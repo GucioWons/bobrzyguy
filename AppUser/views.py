@@ -1,6 +1,6 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 
 
@@ -51,3 +51,15 @@ def logout_view(request):
 
 def landing_page(request):
     return render(request, "landing_view.html")
+
+@login_required(login_url='/landing')
+def change_password_page(request):
+    form = PasswordChangeForm(request.user, request.POST or None)
+    if form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)  # Important!
+        return redirect('/changepassword/')
+    context = {
+        "form": form,
+    }
+    return render(request, 'change_password_view.html', context)
