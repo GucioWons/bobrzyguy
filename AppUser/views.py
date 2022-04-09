@@ -1,10 +1,10 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 
 
 # Create your views here.
-from oauthlib.oauth2.rfc6749.errors import LoginRequired
 
 from AppUser.forms import SignUpForm, AppUserCreateForm
 from AppUser.models import AppUser
@@ -12,7 +12,7 @@ from AppUser.models import AppUser
 
 def login_page(request):
     if request.user.is_authenticated:
-        return redirect('/login/')
+        return redirect('/landing/')
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
@@ -21,7 +21,7 @@ def login_page(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/login/')
+                return redirect('/landing/')
     form = AuthenticationForm()
     context = {
         "form": form
@@ -30,17 +30,24 @@ def login_page(request):
 
 def register_page(request):
     if request.user.is_authenticated:
-        return redirect('/login/')
+        return redirect('/landing/')
     form = SignUpForm(request.POST or None)
     form2 = AppUserCreateForm(request.POST or None)
     if form.is_valid() and form2.is_valid():
         user = form.save()
         AppUser.objects.create(user=user, type=form2.cleaned_data.get("type"))
         login(request, user)
-        return redirect("/login/")
+        return redirect("/landing/")
     context = {
         "form": form,
         "form2": form2
     }
     return render(request, "register_view.html", context)
 
+@login_required(login_url='/landing')
+def logout_view(request):
+    logout(request)
+    return redirect("/landing/")
+
+def landing_page(request):
+    return render(request, "landing_view.html")
