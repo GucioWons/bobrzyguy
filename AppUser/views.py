@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 
-from AppUser.forms import SignUpForm, AppUserCreateForm, ChangePasswordForm
+from AppUser.forms import SignUpForm, ChangePasswordForm
 from AppUser.models import AppUser
 
 
@@ -32,15 +32,12 @@ def register_page(request):
     if request.user.is_authenticated:
         return redirect('/landing/')
     form = SignUpForm(request.POST or None)
-    form2 = AppUserCreateForm(request.POST or None)
-    if form.is_valid() and form2.is_valid():
+    if form.is_valid():
         user = form.save()
-        AppUser.objects.create(user=user, type=form2.cleaned_data.get("type"))
         login(request, user)
         return redirect("/landing/")
     context = {
         "form": form,
-        "form2": form2
     }
     return render(request, "register_view.html", context)
 

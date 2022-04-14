@@ -6,41 +6,38 @@ from django.forms import ModelForm
 
 from AppUser.models import AppUser
 
-TYPE_CHOICES = [('CUSTOMER', 'Customer'), ('WORKER', 'Worker')]
-
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=80)
     last_name = forms.CharField(max_length=80)
     email = forms.EmailField()
-    username = forms.CharField()
-    password1 = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
-    password2 = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'type': 'password'
+    }))  # help-text
+    password2 = forms.CharField(label='Confirm Password',
+                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
 
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email', 'username', 'password1', 'password2')
-
-class ChangePasswordForm(PasswordChangeForm):
-    old_password = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
-    new_password1 = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
-    new_password2 = forms.CharField(widget = forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
-
-class AppUserCreateForm(ModelForm):
     class Meta:
         model = AppUser
-        fields = ('type',)
+        fields = ('type', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-class ChangeFirstNameForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ('first_name',)
 
-class ChangeLastNameForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ('last_name',)
+class ChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
 
-class ChangeEmailForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ('email',)
+# class ChangeFirstNameForm(ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ('first_name',)
+#
+# class ChangeLastNameForm(ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ('last_name',)
+#
+# class ChangeEmailForm(ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ('email',)

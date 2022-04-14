@@ -68,6 +68,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'AppUser.AppUser'
+
 WSGI_APPLICATION = 'bobrzyguy.wsgi.application'
 
 
