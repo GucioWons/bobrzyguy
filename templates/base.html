@@ -10,7 +10,11 @@
 <body>
 <header>
     <nav>
-        <h1>Welcome, Nazwa Uzytkownika</h1>
+        {%if request.user.is_authenticated%}
+        <h1>Welcome, {{request.user.first_name}} {{request.user.last_name}}</h1>
+        {%else%}
+        <h1>Welcome</h1>
+        {%endif%}
         <ul class="tabs">
             <li class="tab active">
                 <a data-switcher data-tab="1">Ogólne</a>

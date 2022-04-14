@@ -3,10 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.shortcuts import render, redirect
 
-
 # Create your views here.
 
-from AppUser.forms import SignUpForm, ChangePasswordForm
+from AppUser.forms import SignUpForm, ChangePasswordForm, ChangeFirstNameForm, ChangeLastNameForm, ChangeEmailForm
 from AppUser.models import AppUser
 
 
@@ -28,6 +27,7 @@ def login_page(request):
     }
     return render(request, "login_view.html", context)
 
+
 def register_page(request):
     if request.user.is_authenticated:
         return redirect('/landing/')
@@ -41,13 +41,16 @@ def register_page(request):
     }
     return render(request, "register_view.html", context)
 
+
 @login_required(login_url='/landing')
 def logout_view(request):
     logout(request)
     return redirect("/landing/")
 
+
 def landing_page(request):
     return render(request, "landing_view.html")
+
 
 @login_required(login_url='/landing')
 def change_password_page(request):
@@ -60,3 +63,23 @@ def change_password_page(request):
         "form": form,
     }
     return render(request, 'change_password_view.html', context)
+
+
+def settings_page(request):
+    form = ChangeFirstNameForm(request.POST or None, instance=request.user)
+    form2 = ChangeLastNameForm(request.POST or None, instance=request.user)
+    form3 = ChangeEmailForm(request.POST or None, instance=request.user)
+    response = redirect('appuser:settings-view')
+    if 'change_first_name' in request.POST:
+        if form.is_valid():
+            form.save()
+            return response
+    elif 'change_last_name' in request.POST:
+        if form2.is_valid():
+            form2.save()
+            return response
+    elif 'change_email' in request.POST:
+        if form3.is_valid():
+            form3.save()
+            return response
+    return render(request, "settings_view.html", context={'form': form, 'form2': form2, 'form3': form3, })

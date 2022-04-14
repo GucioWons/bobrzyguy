@@ -6,6 +6,7 @@ from django.forms import ModelForm
 
 from AppUser.models import AppUser
 
+
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=80)
     last_name = forms.CharField(max_length=80)
@@ -27,17 +28,20 @@ class ChangePasswordForm(PasswordChangeForm):
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
 
-# class ChangeFirstNameForm(ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ('first_name',)
-#
-# class ChangeLastNameForm(ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ('last_name',)
-#
-# class ChangeEmailForm(ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ('email',)
+
+class ChangeFirstNameForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name',)
+
+
+class ChangeLastNameForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('last_name',)
+
+
+class ChangeEmailForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ('email',)

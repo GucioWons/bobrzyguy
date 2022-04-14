@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+
+{%block navbar%}
+{%include "navbar.html" %}
+{%endblock%}
+
+{%block content%}
+
+    <form method="POST">{% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" name="change_first_name">Submit</button>
+    </form>
+
+    <form method="POST">{% csrf_token %}
+        {{form2.as_p}}
+        <button type="submit" name="change_last_name">Submit</button>
+    </form>
+
+    <form method="POST">{% csrf_token %}
+        {{form3.as_p}}
+        <button type="submit" name="change_email">Submit</button>
+    </form>
+
+
+{%endblock%}
