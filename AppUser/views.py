@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 
-from AppUser.forms import SignUpForm, AppUserCreateForm
+from AppUser.forms import SignUpForm, AppUserCreateForm, ChangePasswordForm
 from AppUser.models import AppUser
 
 
@@ -54,7 +54,7 @@ def landing_page(request):
 
 @login_required(login_url='/landing')
 def change_password_page(request):
-    form = PasswordChangeForm(request.user, request.POST or None)
+    form = ChangePasswordForm(request.user, request.POST or None)
     if form.is_valid():
         user = form.save()
         update_session_auth_hash(request, user)  # Important!
