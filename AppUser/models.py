@@ -3,8 +3,10 @@ from django.contrib.auth.models import User, PermissionsMixin, UserManager
 from django.core.mail import send_mail
 from django.db import models
 
-
 # Create your models here.
+from django.urls import reverse
+
+
 class AppUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password):
         if not email:
@@ -35,6 +37,7 @@ class AppUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class AppUser(AbstractBaseUser):
     TYPE_CHOICES = [('CUSTOMER', 'Customer'), ('WORKER', 'Worker')]
 
@@ -42,6 +45,7 @@ class AppUser(AbstractBaseUser):
     first_name = models.CharField(verbose_name='first name', max_length=30, blank=True)
     last_name = models.CharField(verbose_name='last name', max_length=30, blank=True)
     type = models.CharField(max_length=50, choices=TYPE_CHOICES)
+    avatar = models.ImageField(default='avatars/user.png', null=True, upload_to='avatars/')
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_active = models.BooleanField(default=True)
@@ -76,3 +80,6 @@ class AppUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    def get_absolute_url(self):
+        return reverse('appuser:profile-view', kwargs={'my_id': self.id})
