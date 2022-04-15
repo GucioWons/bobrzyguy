@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -53,30 +54,40 @@ def landing_page(request):
 
 
 def settings_page(request):
-    form = ChangeFirstNameForm(request.POST or None, instance=request.user)
-    form2 = ChangeLastNameForm(request.POST or None, instance=request.user)
-    form3 = ChangeEmailForm(request.POST or None, instance=request.user)
-    form4 = ChangePasswordForm(request.user, request.POST or None)
+    form = ChangeFirstNameForm(instance=request.user)
+    form2 = ChangeLastNameForm(instance=request.user)
+    form3 = ChangeEmailForm(instance=request.user)
+    form4 = ChangePasswordForm(request.user)
     response = redirect('appuser:settings-view')
-    if 'change_first_name' in request.POST:
-        if form.is_valid():
-            form.save()
-            return response
-    elif 'change_last_name' in request.POST:
-        if form2.is_valid():
-            form2.save()
-            return response
-    elif 'change_email' in request.POST:
-        if form3.is_valid():
-            form3.save()
-            return response
-    elif 'change_password' in request.POST:
-        if form4.is_valid():
-            user = form4.save()
-            update_session_auth_hash(request, user)  # Important!
-            return response
-
-    return render(request, "settings_view.html", context={'form': form, 'form2': form2, 'form3': form3, 'form4': form4})
+    if request.method == 'POST':
+        if 'change_first_name' in request.POST:
+            form = ChangeFirstNameForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                return response
+        elif 'change_last_name' in request.POST:
+            form2 = ChangeLastNameForm(request.POST, instance=request.user)
+            if form2.is_valid():
+                form2.save()
+                return response
+        elif 'change_email' in request.POST:
+            form3 = ChangeEmailForm(request.POST, instance=request.user)
+            if form3.is_valid():
+                form3.save()
+                return response
+        elif 'change_password' in request.POST:
+            form4 = ChangePasswordForm(request.user, request.POST)
+            if form4.is_valid():
+                user = form4.save()
+                update_session_auth_hash(request, user)  # Important!
+                return response
+    context = {
+        'form': form,
+        'form2': form2,
+        'form3': form3,
+        'form4': form4
+    }
+    return render(request, "settings_view.html", context)
 
 @login_required(login_url='/landing')
 def profile_page(request, my_id):
