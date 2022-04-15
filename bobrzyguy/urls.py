@@ -22,5 +22,5 @@ from bobrzyguy import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('AppUser.urls')),
-    path('social-auth/', include('social_django.urls', namespace='social'))
+    path('', include('Team.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
