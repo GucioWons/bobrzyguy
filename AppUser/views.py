@@ -20,7 +20,7 @@ def login_page(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('/landing/')
     form = AuthenticationForm()
     context = {

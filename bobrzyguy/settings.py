@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django',
     'AppUser',
 ]
 
@@ -51,7 +50,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'bobrzyguy.urls'
@@ -67,30 +65,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
 
 AUTH_USER_MODEL = 'AppUser.AppUser'
-
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
-    "social_core.backends.github.GithubOAuth2",
-)
-
-LOGIN_URL = 'appuser:login-view'
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/landing/'
-LOGOUT_URL = 'appuser:logout-view'
-LOGOUT_REDIRECT_URL = reverse_lazy('appuser:landing-view')
-
-SOCIAL_AUTH_GITHUB_KEY = '52561f6e49252678e6ef'
-SOCIAL_AUTH_GITHUB_SECRET = '1dd18066aae39b057833f001fae49b720e78eee1'
-
-SITE_ID = 1
 
 WSGI_APPLICATION = 'bobrzyguy.wsgi.application'
 
