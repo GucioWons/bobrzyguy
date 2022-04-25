@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+{%block content%}
+<section class="pages">
+    <div class="page">
+     <form method="POST">{% csrf_token %}
+       {{form2.as_p}}
+       {{form.as_p}}
+       <button class="btn">Submit</button>
+    </form>
+    </div>
+    </section>
+{%endblock%}

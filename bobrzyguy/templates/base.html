@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UserPage</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}"> <! -- glowny css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<header>
+    <nav>
+        {%if request.user.is_authenticated%}
+        <h1>Welcome, {{request.user.first_name}} {{request.user.last_name}}</h1>
+        {%else%}
+        <h1>Not Logged</h1>
+        {%endif%}
+        <ul class="tabs">
+            <li class="tab active">
+                <a data-switcher data-tab="1">Ogólne</a>
+            </li>
+            <li class="tab">
+                <a data-switcher data-tab="2">Powiadomienia</a>
+            </li>
+            <li class="tab">
+                <a data-switcher data-tab="3">Zespoły</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<screen>
+    <section class="pages">
+        {%block content%}
+            replace me
+        {%endblock%}
+    </section>
+</screen>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="{% static 'js/functions.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+
+</script>
+</body>
+</html>
