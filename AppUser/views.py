@@ -10,37 +10,32 @@ from AppUser.forms import SignUpForm, ChangePasswordForm, ChangeFirstNameForm, C
 from AppUser.models import AppUser
 
 
-def login_page(request):
+def logister_page(request):
     if request.user.is_authenticated:
         return redirect('/landing/')
-    if request.method == 'POST':
-        form = AuthenticationForm(request=request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                return redirect('/landing/')
     form = AuthenticationForm()
-    context = {
-        "form": form
-    }
-    return render(request, "login_view.html", context)
-
-
-def register_page(request):
-    if request.user.is_authenticated:
-        return redirect('/landing/')
-    form = SignUpForm(request.POST or None)
-    if form.is_valid():
-        user = form.save()
-        login(request, user)
-        return redirect("/landing/")
+    form2 = SignUpForm()
+    if request.method == 'POST':
+        if "login" in request.POST:
+            form = AuthenticationForm(request=request, data=request.POST)
+            if form.is_valid():
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                    return redirect('/landing/')
+        if "register" in request.POST:
+            form2 = SignUpForm(request.POST)
+            if form2.is_valid():
+                user = form2.save()
+                login(request, user)
+                return redirect('/landing/')
     context = {
         "form": form,
+        "form2": form2
     }
-    return render(request, "register_view.html", context)
+    return render(request, "logister_view.html", context)
 
 
 @login_required(login_url='/landing')
@@ -88,6 +83,7 @@ def settings_page(request):
         'form4': form4
     }
     return render(request, "settings_view.html", context)
+
 
 @login_required(login_url='/landing')
 def profile_page(request, my_id):

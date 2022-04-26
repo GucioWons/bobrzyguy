@@ -8,6 +8,8 @@ from AppUser.models import AppUser
 
 
 class SignUpForm(UserCreationForm):
+    TYPE_CHOICES = [('CUSTOMER', 'Customer'), ('WORKER', 'Worker')]
+
     first_name = forms.CharField(max_length=80)
     last_name = forms.CharField(max_length=80)
     email = forms.EmailField()
@@ -17,10 +19,11 @@ class SignUpForm(UserCreationForm):
     }))  # help-text
     password2 = forms.CharField(label='Confirm Password',
                                 widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
+    type = forms.ChoiceField(choices=TYPE_CHOICES)
 
     class Meta:
         model = AppUser
-        fields = ('type', 'first_name', 'last_name', 'email', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'email', 'password1', 'password2', 'type')
 
 
 class ChangePasswordForm(PasswordChangeForm):
