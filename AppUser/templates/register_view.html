@@ -1,8 +1,42 @@
 {%extends 'base.html'%}
 {%block content%}
-     <form method="POST">{% csrf_token %}
-       {{form2.as_p}}
-       {{form.as_p}}
-       <button type="submit">Submit</button>
-    </form>
+  <link rel="stylesheet" href="/static/styles/sign_style.css"/>
+<div class="panel">
+    <div class="box">
+       <form method="POST"> {% csrf_token %}
+           <div class="inputs">
+            <input type="firstname" required>
+            <label>First Name</label>
+        </div>
+           <div class="inputs">
+            <input type="lastname" required>
+            <label>Last Name</label>
+        </div>
+        <div class="inputs">
+            <input type="email" required>
+            <label>Email</label>
+        </div>
+        <div class="inputs">
+            <input type="password" required>
+            <label>Password</label>
+        </div>
+           <div class="inputs">
+            <input type="password2" required>
+            <label>Repeat </label>
+        </div>
+           <div>
+  <input type="radio" id="worker" name="type" value="worker"
+         checked>
+  <label for="worker">Worker</label>
+</div>
+
+<div>
+  <input type="radio" id="customer" name="type" value="customer">
+  <label for="customer">Customer</label>
+</div>
+                 <button class="submit">Submit</button>
+     </form>
+    </div>
+</div>
 {%endblock%}
+
