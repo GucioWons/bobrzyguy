@@ -6,8 +6,40 @@
 
 {%block content%}
 
-<h1>{{object.name}}</h1>
-<h2>{{object.description}}</h2>
+
+  <link rel="stylesheet" href="/static/styles/teams.css">
+
+<div class="all_page">
+    <div class="col1">
+        <div class="t_name">
+            <h2>{{object.name}}</h2>
+            <h3>{{object.description}}</h3>
+        </div>
+        <div class="t_members">
+            <p class="m_name">      <!-- Tu moze byc petla w js -->
+                Bunio
+            </p>
+        </div>
+
+    </div>
+    <div class="space"></div>
+    <div class="col2">
+        <div class="c2_content">
+            <div class="f_block">
+                <p class="f_name">
+                    CSSiarz
+                </p>
+            </div>
+            <br><br>
+            <div class="d_block">
+                <p class="f_desc">
+                    CSSuje ile wlezie
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 {%endblock%}
