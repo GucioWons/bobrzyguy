@@ -27,6 +27,27 @@
                 <a data-switcher data-tab="3">Zespoły</a>
             </li>
         </ul>
+        <ul>
+            <li class="search-icon">
+            <form method="GET"  action="{% url 'appuser:search-view'%}">
+                <input type="search" placeholder="Search"  name="query"  value="{{request.GET.query}}">
+                <button class="icon" type="submit">
+                    <span class="fas fa-search"></span>
+                </button>
+            </form>
+            </li>
+
+        </ul>
+
+
+
+
+
+
+
+
+
+
     </nav>
 </header>
 

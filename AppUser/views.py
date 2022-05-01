@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from AppUser.forms import SignUpForm, ChangePasswordForm, ChangeFirstNameForm, ChangeLastNameForm, ChangeEmailForm
 from AppUser.models import AppUser
+from Team.models import Team
+from django.db.models import Q
 
 
 def logister_page(request):
@@ -92,3 +94,18 @@ def profile_page(request, my_id):
         'object': obj,
     }
     return render(request, "profile_view.html", context)
+
+
+def search_page(request):
+    query = request.GET.get('query')
+    users_list = AppUser.objects.filter(
+        (Q(first_name__icontains=query) | Q(last_name__icontains=query))
+    )
+    team_list = Team.objects.filter(
+        (Q(name__icontains=query))
+    )
+    context = {
+        "queryset1": users_list,
+        "queryset2": team_list
+    }
+    return render(request, "search_view.html", context)
