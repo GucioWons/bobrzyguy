@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -17,10 +18,10 @@ def team_page(request, my_id):
     }
     return render(request, "team_view.html", context)
 
+
 def create_team_page(request):
     form = CreateTeamForm(request.POST or None)
     if form.is_valid():
-        print("dupa")
         new_team = form.save(commit=False)
         new_team.boss = request.user
         new_team.save()
@@ -30,6 +31,7 @@ def create_team_page(request):
     }
     return render(request, "create_team_view.html", context)
 
+
 def invite_view(request, team_id, my_id):
     team = get_object_or_404(Team, id=team_id)
     user = get_object_or_404(AppUser, id=my_id)
@@ -38,6 +40,16 @@ def invite_view(request, team_id, my_id):
         if not team.members.all().contains(user):
             Request.objects.create(user_to=user, user_from=request.user, team=team, date_expired=date)
     return redirect(team.get_absolute_url())
+
+def notification_page(request):
+    queryset = Request.objects.filter(user_to=request.user).order_by('-date_created')
+    p = Paginator(queryset, 3)
+    page_num = request.GET.get("page", 1)
+    page = p.page(page_num)
+    context = {
+        'object_list': page,
+    }
+    return render(request, "notification_view.html", context)
 
 def accept_view(request, my_id):
     obj = get_object_or_404(Request, id=my_id)
@@ -50,6 +62,7 @@ def accept_view(request, my_id):
                 return redirect(obj.team.get_absolute_url())
     return redirect("/landing/")
 
+
 def decline_view(request, my_id):
     obj = get_object_or_404(Request, id=my_id)
     if request.user == obj.user_to:
@@ -60,8 +73,9 @@ def decline_view(request, my_id):
                 return redirect("/landing/")
     return redirect("/landing/")
 
+
 def leave_view(request, my_id):
     obj = get_object_or_404(Team, id=my_id)
-    if(obj.members.all().contains(request.user)):
+    if obj.members.all().contains(request.user):
         obj.members.remove(request.user)
     return redirect("/landing/")

@@ -1,0 +1,29 @@
+{%extends 'base.html'%}
+
+{%block content%}
+
+{% for notification in object_list %}
+{%if notification.accepted%}
+<h4><i class="fa fa-check-circle-o"></i>Accepted</h4>
+{%endif%}
+{%if notification.declined%}
+<h3><i class="fa fa-times-circle-o"></i>Declined</h3>
+{%endif%}
+<p>{{notification.date_created}}</p>
+<h1>
+    {{notification.user_from.get_full_name}} invited you to join {{notification.team.name}}
+    {%if not notification.declined and not notification.accepted%}
+        <a href="{{notification.get_accept_url}}"><i class="fa fa-check"></i></a>
+        <a href="{{notification.get_decline_url}}"><i class="fa fa-times"></i></a>
+    {%endif%}
+</h1>
+{% endfor %}
+
+{%if object_list.has_previous%}
+<a href="{% url 'team:notification-view' %}?page={{object_list.previous_page_number}}">Back</a>
+{%endif%}
+{{object_list.number}}
+{%if object_list.has_next%}
+<a href="{% url 'team:notification-view' %}?page={{object_list.next_page_number}}">Next</a>
+{%endif%}
+{%endblock%}
