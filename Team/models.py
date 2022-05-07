@@ -33,7 +33,7 @@ class Request(models.Model):
     date_expired = models.DateTimeField()
 
     def __str__(self):
-        return (user_to.email + " to " + team.name)
+        return (self.user_to.email + " to " + self.team.name)
 
     def get_accept_url(self):
         return reverse('team:accept-view', kwargs={'my_id': self.id})
