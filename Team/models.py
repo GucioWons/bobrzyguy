@@ -31,6 +31,8 @@ class Request(models.Model):
     user_to = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="user_to")
     date_created = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField()
+    accepted = models.BooleanField(default=False)
+    declined = models.BooleanField(default=False)
 
     def __str__(self):
         return (self.user_to.email + " to " + self.team.name)
