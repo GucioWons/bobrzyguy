@@ -3,8 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.contrib.sites.shortcuts import get_current_site
 # Create your views here.
+from django.core.mail import EmailMessage, send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
 
 from AppUser.forms import SignUpForm, ChangePasswordForm, ChangeFirstNameForm, ChangeLastNameForm, ChangeEmailForm
 from AppUser.models import AppUser
@@ -13,6 +16,8 @@ from django.db.models import Q
 
 
 def logister_page(request):
+    template = render_to_string('email_template.html')
+
     if request.user.is_authenticated:
         return redirect('/landing/')
     form = AuthenticationForm()
@@ -24,6 +29,8 @@ def logister_page(request):
                 username = form.cleaned_data.get('username')
                 password = form.cleaned_data.get('password')
                 user = authenticate(username=username, password=password)
+
+
                 if user is not None:
                     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                     return redirect('/landing/')
@@ -32,7 +39,17 @@ def logister_page(request):
             if form2.is_valid():
                 user = form2.save()
                 login(request, user)
-                return redirect('/landing/')
+                #mail=(request, user)
+              #  newmail=mail.replace("AppUser: ", "")
+                print(user)
+                send_mail(
+                    'Tutultestowy',
+                    template,
+                    'bobrzygaj@gmail.com',
+                    [user],
+                    fail_silently=False)
+                #print(request, user)
+                #return redirect('/landing/')
     context = {
         "form": form,
         "form2": form2

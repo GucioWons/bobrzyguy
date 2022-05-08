@@ -2,7 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User, PermissionsMixin, UserManager
 from django.core.mail import send_mail
 from django.db import models
-
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 from django.urls import reverse
 
@@ -39,6 +40,9 @@ class AppUserManager(BaseUserManager):
 
 
 class AppUser(AbstractBaseUser):
+
+
+
     TYPE_CHOICES = [('CUSTOMER', 'Customer'), ('WORKER', 'Worker')]
 
     email = models.EmailField(verbose_name='email', unique=True)
@@ -48,7 +52,8 @@ class AppUser(AbstractBaseUser):
     avatar = models.ImageField(default='avatars/user.png', null=True, upload_to='avatars/')
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
-    is_active = models.BooleanField(default=True)
+    #email_token = models.CharField(max_length=200)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
