@@ -19,7 +19,7 @@ class SignUpForm(UserCreationForm):
     }))  # help-text
     password2 = forms.CharField(label='Confirm Password',
                                 widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
-    type = forms.ChoiceField(label='', widget=forms.RadioSelect, choices=TYPE_CHOICES)
+    type = forms.ChoiceField(label="", widget=forms.RadioSelect, choices=TYPE_CHOICES)
 
     class Meta:
         model = AppUser
