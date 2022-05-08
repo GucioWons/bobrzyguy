@@ -39,10 +39,41 @@
 }
 
 .container{
-    width:400px ;
-    background: #FFE;
-    padding: 30px;
-    border-radius: 10px;
+    width:100%;
+}
+
+
+.container .boxRegister
+{
+     border-radius: 10px;
+     background: #FFE;
+     padding: 30px;
+     width: 33%;
+     float: left;
+
+}
+
+.container .boxLogin {
+     border-radius: 10px;
+     background: #FFE;
+     padding: 30px;
+     width: 33%;
+     float: left;
+}
+
+.container .szczurIn {
+    height: 2px;
+    float: left;
+    width: 25%;
+    margin: 0 10px;
+}
+
+.container .szczurIn .lajn
+{
+   width: 2px;
+   height: 500px;
+   background-image: linear-gradient(#6A5ACD, #483D8B);
+   margin: 0 50%;
 }
 
 .inputs{
@@ -74,6 +105,11 @@
     pointer-events: none;
     font-size: 16px;
     transition: 0.3s;
+}
+
+.inputs label radio
+{
+   font-size: 32px;
 }
 
 .inputs input:focus ~ label,
