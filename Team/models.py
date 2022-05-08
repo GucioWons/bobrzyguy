@@ -42,3 +42,14 @@ class Request(models.Model):
 
     def get_decline_url(self):
         return reverse('team:decline-view', kwargs={'my_id': self.id})
+
+class Opinion(models.Model):
+    OPINION_CHOICES = [(1, '1/5'), (2, '2/5'), (3, '3/5'), (4, '4/5'), (5, '5/5')]
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    user = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    content = models.CharField(blank=True, max_length=250)
+    date_created = models.DateTimeField(auto_now_add=True)
+    option_1 = models.IntegerField(choices=OPINION_CHOICES)
+    option_2 = models.IntegerField(choices=OPINION_CHOICES)
+    option_3 = models.IntegerField(choices=OPINION_CHOICES)
+    option_4 = models.IntegerField(choices=OPINION_CHOICES)
