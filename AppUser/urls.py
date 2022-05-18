@@ -3,6 +3,8 @@ from django.urls import path
 from AppUser.views import logout_view, landing_page, settings_page, \
     profile_page, logister_page, search_page
 
+from Team.views import search_result
+
 app_name = "appuser"
 urlpatterns = [
     path('logister/', logister_page, name='logister-view'),
@@ -11,4 +13,6 @@ urlpatterns = [
     path('settings/', settings_page, name='settings-view'),
     path('profile/<int:my_id>/', profile_page, name='profile-view'),
     path('search_all', search_page, name='search-view'),
+    path('search/', search_result, name='search'),
+
     ]

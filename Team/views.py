@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+from django.http import JsonResponse
 
 # Create your views here.
 from django.utils import timezone
@@ -9,6 +10,37 @@ from django.utils import timezone
 from AppUser.models import AppUser
 from Team.forms import CreateTeamForm
 from Team.models import Team, Request
+from django.db.models import Q
+from django.shortcuts import render
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+def search_result(request):
+    if request.accepts('text'):
+        res = None
+        series = request.POST.get('series')
+        query_se = AppUser.objects.filter(Q(first_name__icontains=series) | Q(avatar__icontains=series))
+
+        if len(query_se) > 0 and len(series) > 0:
+            data = []
+            for pos in query_se:
+                item = {
+                    'pk': pos.pk,
+                    'first_name': pos.first_name,
+                    'avatar': pos.avatar.url,
+
+                }
+                data.append(item)
+            res = data
+        else:
+            res = 'Nie znaleziono pasojacych wynikow'
+
+        return JsonResponse({'data': res})
+
+    return JsonResponse({})
+
+
 
 
 def team_page(request, my_id):
@@ -79,3 +111,5 @@ def leave_view(request, my_id):
     if obj.members.all().contains(request.user):
         obj.members.remove(request.user)
     return redirect("/landing/")
+
+

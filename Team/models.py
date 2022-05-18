@@ -53,3 +53,4 @@ class Opinion(models.Model):
     option_2 = models.IntegerField(choices=OPINION_CHOICES)
     option_3 = models.IntegerField(choices=OPINION_CHOICES)
     option_4 = models.IntegerField(choices=OPINION_CHOICES)
+
