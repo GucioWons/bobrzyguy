@@ -1,10 +1,10 @@
 {%extends 'base.html'%}
 
 {%block content%}
-
+<link rel="stylesheet" href="/static/styles/team_create.css">
 <form method="POST">{%csrf_token%}
     {{form.as_p}}
-    <button type="submit" >Submit</button>
+    <button type="submit" class="button_submit" class="">Stwórz</button>
 </form>
 
 {%endblock%}
