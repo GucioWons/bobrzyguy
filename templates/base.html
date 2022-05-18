@@ -51,15 +51,92 @@ integrity=sha384-9aIt2nRpC12Uk9gS9baD1411NQApFmC26EwAOH8wgZ15MYYXFfc+NcPb1dKGj7S
             <li class="tab">
                 <a data-switcher data-tab="4">Zespoły</a>
             </li>
-            <li class="search-icon">
+        </ul>
+ <!--           <li class="search-icon">
             <form method="GET"  action="{% url 'appuser:search-view'%}">
                 <input type="search" placeholder="Search"  name="query"  value="{{request.GET.query}}">
                 <button class="icon" type="submit">
                     <span class="fas fa-search"></span>
                 </button>
             </form>
-            </li>
-        </ul>
+            </li>   -->
+        <div class="w-100 text center">
+             <form autocomplete="off" id="search-form-team" method="post">
+                 {% csrf_token %}
+                 <input type="text" id="search-input-team" class="p-3 w-50 search mt-4" placeholder="Team Search">
+             </form>
+             <!-- results card -->
+             <div id="result-box-team" class="result-card-team not-visible">
+
+             </div>
+         </div>
+
+             <!-- JS -->
+        <script>
+        const sendSearchDataTeam = (series) => {
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "team:search" %}',
+            data :
+            {
+                'csrfmiddlewaretoken':csrf2,
+                'series':series,
+            },
+            success: (res) => {
+                const data = res.data
+                result_box_team.innerHTML += "";
+                if(Array.isArray(data)){
+                    result_box_team.innerHTML = "";
+                    data.forEach(series => {
+                        result_box_team.innerHTML += `
+                                <a href="/team/${series.pk}" class="link">
+
+                                        <div class="col-10">
+                                            <h3>${series.name}</h3>
+                                            <h5>${series.description}</h5>
+                                        </div>
+
+                                </a>`
+                    });
+                }else
+                    {
+                    if(search_input_team.value.lenght > 0){
+                        result_box_team.innerHTML = `<b>${data}</b>`
+                    }
+                    else{
+                    result_box_team.classList.add('not-visible')
+                    }
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        })
+    }
+
+
+    const search_form_team = document.getElementById('search-form-team')
+
+    const search_input_team = document.getElementById('search-input-team')
+
+    const result_box_team = document.getElementById('result-box-team')
+
+    const csrf2 = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+    search_input_team.addEventListener('keyup', e=>{
+        console.log(e.target.value);
+
+
+        if(result_box_team.classList.contains('not-visible')){
+            result_box_team.classList.remove('not-visible')
+        }
+
+        sendSearchDataTeam(e.target.value);
+    });
+
+        </script>
+
 
 
 
@@ -90,7 +167,7 @@ integrity=sha384-9aIt2nRpC12Uk9gS9baD1411NQApFmC26EwAOH8wgZ15MYYXFfc+NcPb1dKGj7S
 </footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% static 'js/functions.js' %}"></script>
+
 
 </body>
 

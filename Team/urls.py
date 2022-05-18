@@ -1,7 +1,7 @@
 from django.urls import path
 
 from Team.views import team_page, invite_view, accept_view, decline_view, leave_view, create_team_page, \
-    notification_page
+    notification_page, search_result_team
 
 app_name = "team"
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path('leave/<int:my_id>/', leave_view, name='leave-view'),
     path('team/create/', create_team_page, name='create-team-view'),
     path('notifications/', notification_page, name='notification-view'),
+    path('searchteam/', search_result_team, name='search'),
     ]

@@ -11,17 +11,18 @@ from AppUser.models import AppUser
 from Team.forms import CreateTeamForm
 from Team.models import Team, Request
 from django.db.models import Q
-from django.shortcuts import render
+
 
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 
 def search_result(request):
     if request.accepts('text'):
         res = None
         series = request.POST.get('series')
-        query_se = AppUser.objects.filter(Q(first_name__icontains=series) | Q(avatar__icontains=series))
-
+        querydupa = AppUser.objects.filter(Q(first_name__icontains=series) | Q(last_name__icontains=series))
+        query_se = querydupa.filter(type="WORKER")
         if len(query_se) > 0 and len(series) > 0:
             data = []
             for pos in query_se:
@@ -29,6 +30,7 @@ def search_result(request):
                     'pk': pos.pk,
                     'first_name': pos.first_name,
                     'avatar': pos.avatar.url,
+                    'last_name': pos.last_name,
 
                 }
                 data.append(item)
@@ -41,6 +43,27 @@ def search_result(request):
     return JsonResponse({})
 
 
+def search_result_team(request):
+    if request.accepts('text'):
+        res = None
+        series = request.POST.get('series')
+        query_se = Team.objects.filter(Q(name__icontains=series) | Q(description__icontains=series))
+        if len(query_se) > 0 and len(series) > 0:
+            data = []
+            for pos in query_se:
+                item = {
+                    'pk': pos.pk,
+                    'name': pos.name,
+                    'description': pos.description,
+                }
+                data.append(item)
+            res = data
+        else:
+            res = 'Nie znaleziono pasojacych wynikow'
+
+        return JsonResponse({'data': res})
+
+    return JsonResponse({})
 
 
 def team_page(request, my_id):
@@ -73,6 +96,7 @@ def invite_view(request, team_id, my_id):
             Request.objects.create(user_to=user, user_from=request.user, team=team, date_expired=date)
     return redirect(team.get_absolute_url())
 
+
 def notification_page(request):
     queryset = Request.objects.filter(user_to=request.user).order_by('-date_created')
     p = Paginator(queryset, 3)
@@ -82,6 +106,7 @@ def notification_page(request):
         'object_list': page,
     }
     return render(request, "notification_view.html", context)
+
 
 def accept_view(request, my_id):
     obj = get_object_or_404(Request, id=my_id)
@@ -111,5 +136,3 @@ def leave_view(request, my_id):
     if obj.members.all().contains(request.user):
         obj.members.remove(request.user)
     return redirect("/landing/")
-
-
