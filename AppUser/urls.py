@@ -3,7 +3,7 @@ from django.urls import path
 from AppUser.views import logout_view, landing_page, settings_page, \
     profile_page, logister_page, search_page
 
-from Team.views import search_result
+from Team.views import search_result_user
 
 app_name = "appuser"
 urlpatterns = [
@@ -13,6 +13,5 @@ urlpatterns = [
     path('settings/', settings_page, name='settings-view'),
     path('profile/<int:my_id>/', profile_page, name='profile-view'),
     path('search_all', search_page, name='search-view'),
-    path('search/', search_result, name='search'),
-
+    path('search/', search_result_user, name='search'),
     ]

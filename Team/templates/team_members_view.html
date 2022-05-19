@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+
+{%block content%}
+<h1>{{object.name}}</h1>
+{% if request.user == object.boss %}
+<link rel="stylesheet" href="/static/styles/search.css"/>
+ <div class="w-100 text center">
+     <form autocomplete="off" id="search-form" method="post">
+         {% csrf_token %}
+         <input type="text" id="search-input" class="p-3 w-50 search mt-4" placeholder="Search">
+     </form>
+     <!-- results card -->
+     <div id="result-box" class="result-card not-visible">
+
+     </div>
+ </div>
+{% load static %}
+<script src="{% static 'js/search_user.js' %}"></script>
+{% endif %}
+{% for user in object.members.all %}
+<h3>{{user.email}}</h3>
+<h5>{{user.get_full_name}}</h5>
+{%endfor%}
+{%endblock%}
