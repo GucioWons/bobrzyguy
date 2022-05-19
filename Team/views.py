@@ -141,3 +141,6 @@ def leave_view(request, my_id):
     if obj.members.all().contains(request.user):
         obj.members.remove(request.user)
     return redirect("/landing/")
+
+def create_order(request, my_id):
+    form = CreateOrderForm(request.POST or None)

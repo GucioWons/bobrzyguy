@@ -43,6 +43,19 @@ class Request(models.Model):
     def get_decline_url(self):
         return reverse('team:decline-view', kwargs={'my_id': self.id})
 
+class Order(models.Model):
+    customer = models.ForeignKey(AppUser, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20, unique=True)
+    description = models.CharField(max_length=80)
+    deadline = models.DateTimeField()
+    accepted = models.BooleanField(default=False)
+    declined = models.BooleanField(default=False)
+    market = models.BooleanField(default=False)
+
+    def __str__(self):
+        return (self.name + " to " + self.customer.get_full_name)
+
 class Opinion(models.Model):
     OPINION_CHOICES = [(1, '1/5'), (2, '2/5'), (3, '3/5'), (4, '4/5'), (5, '5/5')]
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
